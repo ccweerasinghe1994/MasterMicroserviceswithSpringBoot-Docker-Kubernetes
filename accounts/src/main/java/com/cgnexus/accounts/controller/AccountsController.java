@@ -7,10 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.cgnexus.accounts.constants.AccountConstants.MESSAGE_201;
 import static com.cgnexus.accounts.constants.AccountConstants.STATUS_201;
@@ -25,5 +22,11 @@ public class AccountsController {
     public ResponseEntity<ResponseDTO> createAccount(@RequestBody CustomerDTO customerDTO) {
         accountService.createAccount(customerDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(STATUS_201, MESSAGE_201));
+    }
+
+    @GetMapping("/account")
+    public ResponseEntity<CustomerDTO> fetchAccountDetails(@RequestParam("mobile-number") String mobileNumber) {
+        CustomerDTO customerDTO = accountService.fetchAccountByMobileNumber(mobileNumber);
+        return ResponseEntity.ok(customerDTO);
     }
 }
