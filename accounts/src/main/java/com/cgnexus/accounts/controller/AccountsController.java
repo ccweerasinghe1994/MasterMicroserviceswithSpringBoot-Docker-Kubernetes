@@ -9,8 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.cgnexus.accounts.constants.AccountConstants.MESSAGE_201;
-import static com.cgnexus.accounts.constants.AccountConstants.STATUS_201;
+import static com.cgnexus.accounts.constants.AccountConstants.*;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @RestController
 @RequestMapping(value = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -28,5 +28,16 @@ public class AccountsController {
     public ResponseEntity<CustomerDTO> fetchAccountDetails(@RequestParam("mobile-number") String mobileNumber) {
         CustomerDTO customerDTO = accountService.fetchAccountByMobileNumber(mobileNumber);
         return ResponseEntity.ok(customerDTO);
+    }
+
+    @PutMapping("/account")
+    public ResponseEntity<ResponseDTO> updateAccount(@RequestBody CustomerDTO customerDTO) {
+        boolean isUpdated = accountService.updateAccount(customerDTO);
+
+        if (isUpdated) {
+            return ResponseEntity.ok(new ResponseDTO(STATUS_200, MESSAGE_200));
+        } else {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ResponseDTO(STATUS_500, MESSAGE_500));
+        }
     }
 }

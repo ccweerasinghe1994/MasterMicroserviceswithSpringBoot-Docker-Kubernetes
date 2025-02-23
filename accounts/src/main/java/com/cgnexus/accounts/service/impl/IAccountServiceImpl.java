@@ -57,9 +57,43 @@ public class IAccountServiceImpl implements IAccountService {
 
     }
 
+    /**
+     * @param customerDTO
+     * @return
+     */
+    @Override
+    public boolean updateAccount(CustomerDTO customerDTO) {
+
+        boolean isUpdated = false;
+
+        AccountDTO accountDTO = customerDTO.getAccountDTO();
+
+        if (accountDTO != null) {
+            Account account = findAccountByAccountNumber(accountDTO.getAccountNumber());
+            AccountMapper.toAccount(accountDTO, account);
+            Account updatedAccount = this.updateAccount(account);
+
+            Long customerId = updatedAccount.getCustomerId();
+            Customer customer = customerService.findCustomerByCustomerId(customerId);
+            CustomerMapper.toCustomer(customerDTO, customer);
+            customerService.updateCustomer(customer);
+
+            isUpdated = true;
+
+        }
+
+        return isUpdated;
+    }
+
     private Account findAccountByCustomerId(Long customerId) {
         return accountRepository.findByCustomerId(customerId).orElseThrow(
                 () -> new ResourceNotFoundException("Account", "customerId", customerId.toString())
+        );
+    }
+
+    private Account findAccountByAccountNumber(Long accountNumber) {
+        return accountRepository.findById(accountNumber).orElseThrow(
+                () -> new ResourceNotFoundException("Account", "accountNumber", accountNumber.toString())
         );
     }
 
@@ -76,5 +110,9 @@ public class IAccountServiceImpl implements IAccountService {
         account.setCreatedBy("Anonymous");
         return account;
 
+    }
+
+    private Account updateAccount(Account account) {
+        return accountRepository.save(account);
     }
 }

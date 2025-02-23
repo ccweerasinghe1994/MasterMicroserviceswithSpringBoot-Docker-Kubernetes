@@ -10,4 +10,8 @@ public interface ICustomerService {
     boolean isCustomerExists(String mobileNumber);
 
     Customer createCustomer(CustomerDTO customerDTO);
+
+    Customer findCustomerByCustomerId(Long customerId);
+
+    Customer updateCustomer(Customer customer);
 }

@@ -38,4 +38,24 @@ public class ICustomerServiceImpl implements ICustomerService {
         return customerRepository.save(customer);
 
     }
+
+    /**
+     * @param customerId
+     * @return
+     */
+    @Override
+    public Customer findCustomerByCustomerId(Long customerId) {
+        return customerRepository.findById(customerId).orElseThrow(
+                () -> new ResourceNotFoundException("customer", "customerId", customerId.toString())
+        );
+    }
+
+    /**
+     * @param customer
+     * @return customer
+     */
+    @Override
+    public Customer updateCustomer(Customer customer) {
+        return customerRepository.save(customer);
+    }
 }
