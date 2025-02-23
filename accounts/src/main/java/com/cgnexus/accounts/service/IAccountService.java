@@ -1,13 +1,14 @@
 package com.cgnexus.accounts.service;
 
 import com.cgnexus.accounts.dto.AccountDTO;
+import com.cgnexus.accounts.dto.CustomerDTO;
 
 public interface IAccountService {
 
     /**
      * Creates a new account based on the provided account details
      *
-     * @param accountDTO The account data transfer object containing account information
+     * @param customerDTO The customer data transfer object containing account information
      */
-    void createAccount(AccountDTO accountDTO);
+    void createAccount(CustomerDTO customerDTO);
 }
