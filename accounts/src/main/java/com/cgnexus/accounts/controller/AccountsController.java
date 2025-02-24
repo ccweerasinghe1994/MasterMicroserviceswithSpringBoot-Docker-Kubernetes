@@ -40,4 +40,11 @@ public class AccountsController {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ResponseDTO(STATUS_500, MESSAGE_500));
         }
     }
+
+    @DeleteMapping("/account")
+    public ResponseEntity<ResponseDTO> deleteAccount(@RequestParam("mobile-number") String mobileNumber) {
+        accountService.deleteAccount(mobileNumber);
+        return ResponseEntity.ok(new ResponseDTO(STATUS_200, MESSAGE_200));
+
+    }
 }

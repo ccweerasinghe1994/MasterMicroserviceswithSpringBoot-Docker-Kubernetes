@@ -13,11 +13,13 @@ import com.cgnexus.accounts.repository.AccountRepository;
 import com.cgnexus.accounts.service.IAccountService;
 import com.cgnexus.accounts.service.ICustomerService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Random;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class IAccountServiceImpl implements IAccountService {
@@ -85,6 +87,18 @@ public class IAccountServiceImpl implements IAccountService {
         return isUpdated;
     }
 
+    /**
+     * @param mobileNumber The mobile number of the customer
+     */
+    @Override
+    public void deleteAccount(String mobileNumber) {
+        Customer customer = customerService.fetchCustomerByMobileNumber(mobileNumber);
+        Account account = findAccountByCustomerId(customer.getCustomerId());
+        deleteAccount(account);
+        customerService.deleteCustomer(customer);
+    }
+
+
     private Account findAccountByCustomerId(Long customerId) {
         return accountRepository.findByCustomerId(customerId).orElseThrow(
                 () -> new ResourceNotFoundException("Account", "customerId", customerId.toString())
@@ -113,6 +127,23 @@ public class IAccountServiceImpl implements IAccountService {
     }
 
     private Account updateAccount(Account account) {
-        return accountRepository.save(account);
+        try {
+            Account updatedAccount = accountRepository.save(account);
+            log.info("Account updated successfully, account number: {}", account.getAccountNumber());
+            return updatedAccount;
+        } catch (Exception e) {
+            log.error("Failed to update account, account number: {}", account.getAccountNumber(), e);
+            throw new RuntimeException("Error while updating account, account number: " + account.getAccountNumber(), e);
+        }
+    }
+
+    private void deleteAccount(Account account) {
+        try {
+            log.info("Deleting account, account number: {}", account.getAccountNumber());
+            accountRepository.delete(account);
+        } catch (Exception e) {
+            log.error("Error while deleting account, account number: {}", account.getAccountNumber(), e);
+            throw new RuntimeException("Error while deleting account, account number: " + account.getAccountNumber(), e);
+        }
     }
 }

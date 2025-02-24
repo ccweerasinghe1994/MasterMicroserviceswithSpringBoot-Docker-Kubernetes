@@ -14,4 +14,6 @@ public interface ICustomerService {
     Customer findCustomerByCustomerId(Long customerId);
 
     Customer updateCustomer(Customer customer);
+
+    void deleteCustomer(Customer customer);
 }
