@@ -10,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -35,8 +33,6 @@ public class ICustomerServiceImpl implements ICustomerService {
     @Override
     public Customer createCustomer(CustomerDTO customerDTO) {
         Customer customer = CustomerMapper.toCustomer(customerDTO, new Customer());
-        customer.setCreatedAt(LocalDateTime.now());
-        customer.setCreatedBy("Anonymous");
         return saveCustomer(customer);
 
     }
