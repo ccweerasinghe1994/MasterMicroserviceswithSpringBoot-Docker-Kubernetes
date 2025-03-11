@@ -1,6 +1,7 @@
 package com.cgnexus.cards.controller;
 
 
+import com.cgnexus.cards.dto.CardsDto;
 import com.cgnexus.cards.dto.ErrorResponseDto;
 import com.cgnexus.cards.dto.ResponseDTO;
 import com.cgnexus.cards.service.CardsService;
@@ -17,10 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/v1/", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -72,10 +70,52 @@ public class CardsController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO());
     }
 
+    @Operation(
+            summary = "Fetch Card Details REST API",
+            description = "REST API to fetch card details based on mobile number"
+    )
+    @ApiResponses(
+            {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "HTTP Status OK",
+                            useReturnTypeSchema = true
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "HTTP Status NOT FOUND",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorResponseDto.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "HTTP Status BAD REQUEST",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorResponseDto.class)
+                            )
+                    )
+            }
+    )
+    @GetMapping("/card")
+    public ResponseEntity<CardsDto> fetchCardDetails(
+            @Parameter(
+                    description = "Mobile number of the customer",
+                    example = "9876543210",
+                    schema = @Schema(
+                            type = "string",
+                            format = "string",
+                            pattern = "(^$|[0-9]{10})"
+                    )
+            )
+            @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number should be valid")
+            @RequestParam("mobile-number") String mobileNumber) {
+        CardsDto cardsDto = cardsService.fetchCardDetails(mobileNumber);
+        return ResponseEntity.status(HttpStatus.OK).body(cardsDto);
+    }
+
 }
 
-
-//    createCard
 //    fetchCardDetails using mobileNumber
 //    updateCardDetails
 // deleteCardDetails
