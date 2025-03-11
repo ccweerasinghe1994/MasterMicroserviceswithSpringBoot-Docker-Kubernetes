@@ -1,9 +1,12 @@
 package com.cgnexus.cards.service.impl;
 
 import com.cgnexus.cards.constants.CardConstants;
+import com.cgnexus.cards.dto.CardsDto;
 import com.cgnexus.cards.entity.Cards;
 import com.cgnexus.cards.service.CardsService;
 import com.cgnexus.cards.service.exception.CardAlreadyExistsException;
+import com.cgnexus.cards.service.exception.ResourceNotFoundException;
+import com.cgnexus.cards.service.mapper.CardsMapper;
 import com.cgnexus.cards.service.repository.CardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,14 +18,14 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class CardsServiceImpl implements CardsService {
 
-    private final CardRepository cardRepository;
+    private final CardRepository cardsRepository;
 
     /**
      * @param mobileNumber
      */
     @Override
     public void createCard(String mobileNumber) {
-        Optional<Cards> card = cardRepository.findByMobileNumber(mobileNumber);
+        Optional<Cards> card = cardsRepository.findByMobileNumber(mobileNumber);
 
         if (card.isPresent()) {
             throw new CardAlreadyExistsException("Card already exists for the given mobile number" + mobileNumber);
@@ -30,7 +33,7 @@ public class CardsServiceImpl implements CardsService {
 
         Cards newCard = createNewCard(mobileNumber);
 
-        cardRepository.save(newCard);
+        cardsRepository.save(newCard);
     }
 
     /**
@@ -53,5 +56,17 @@ public class CardsServiceImpl implements CardsService {
         return newCard;
     }
 
+    /**
+     * @param mobileNumber
+     * @return
+     */
+    @Override
+    public CardsDto fetchCardDetails(String mobileNumber) {
+        Cards cards = cardsRepository.findByMobileNumber(mobileNumber).orElseThrow(
+                () -> new ResourceNotFoundException("Card", "mobileNumber", mobileNumber)
+        );
+        return CardsMapper.mapToCardsDto(cards, new CardsDto());
 
+
+    }
 }
