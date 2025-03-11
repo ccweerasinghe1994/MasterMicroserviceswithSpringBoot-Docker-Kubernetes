@@ -67,7 +67,7 @@ public class CardsController {
             @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number should be valid")
             @RequestParam String mobileNumber) {
         cardsService.createCard(mobileNumber);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO());
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(Integer.toString(HttpStatus.CREATED.value()), "Card created successfully"));
     }
 
     @Operation(
