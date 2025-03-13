@@ -1,6 +1,7 @@
 package com.cgnexus.cards.controller;
 
 
+import com.cgnexus.cards.constants.CardConstants;
 import com.cgnexus.cards.dto.CardsDto;
 import com.cgnexus.cards.dto.ErrorResponseDto;
 import com.cgnexus.cards.dto.ResponseDTO;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -114,8 +116,58 @@ public class CardsController {
         return ResponseEntity.status(HttpStatus.OK).body(cardsDto);
     }
 
+    @Operation(
+            summary = "Update Card Details REST API",
+            description = "REST API to update card details based on mobile number"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "417",
+                    description = "Expectation Failed"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            )
+    })
+    @PutMapping("/card")
+    public ResponseEntity<ResponseDTO> updateCardDetails(@Valid @RequestBody CardsDto cardsDto) {
+        boolean isUpdated = cardsService.updateCard(cardsDto);
+        if (isUpdated) {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(new ResponseDTO(CardConstants.STATUS_200, CardConstants.MESSAGE_200));
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.EXPECTATION_FAILED)
+                    .body(new ResponseDTO(CardConstants.STATUS_417, CardConstants.MESSAGE_417_UPDATE));
+        }
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<ResponseDTO> deleteCardDetails(@RequestParam
+                                                         @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
+                                                         String mobileNumber) {
+        boolean isDeleted = cardsService.deleteCard(mobileNumber);
+        if (isDeleted) {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(new ResponseDTO(CardConstants.STATUS_200, CardConstants.MESSAGE_200));
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.EXPECTATION_FAILED)
+                    .body(new ResponseDTO(CardConstants.STATUS_417, CardConstants.MESSAGE_417_DELETE));
+        }
+    }
+
 }
 
-//    fetchCardDetails using mobileNumber
 //    updateCardDetails
 // deleteCardDetails
