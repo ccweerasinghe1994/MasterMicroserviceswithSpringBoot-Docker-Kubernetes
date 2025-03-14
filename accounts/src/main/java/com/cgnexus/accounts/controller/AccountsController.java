@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +24,8 @@ import static com.cgnexus.accounts.constants.AccountConstants.*;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @Tag(
-    name = "CRUD REST APIs for Accounts",
-    description = "Create, Read, Update and Delete account details"
+        name = "CRUD REST APIs for Accounts",
+        description = "Create, Read, Update and Delete account details"
 )
 @RestController
 @RequestMapping(value = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -33,22 +34,26 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 public class AccountsController {
     private final IAccountService accountService;
 
+    @Value("${build.version}")
+    private String buildVersion;
+
+
     @Operation(
-        summary = "Create Account REST API",
-        description = "REST API to create new customer account"
+            summary = "Create Account REST API",
+            description = "REST API to create new customer account"
     )
     @ApiResponses({
-        @ApiResponse(
-            responseCode = "201",
-            description = "HTTP Status CREATED"
-        ),
-        @ApiResponse(
-            responseCode = "400",
-            description = "HTTP Status BAD REQUEST",
-            content = @Content(
-                schema = @Schema(implementation = ResponseDTO.class)
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "HTTP Status CREATED"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "HTTP Status BAD REQUEST",
+                    content = @Content(
+                            schema = @Schema(implementation = ResponseDTO.class)
+                    )
             )
-        )
     })
     @PostMapping("/account")
     public ResponseEntity<ResponseDTO> createAccount(@Valid @RequestBody CustomerDTO customerDTO) {
@@ -57,28 +62,28 @@ public class AccountsController {
     }
 
     @Operation(
-        summary = "Fetch Account Details REST API",
-        description = "REST API to fetch customer account details based on mobile number"
+            summary = "Fetch Account Details REST API",
+            description = "REST API to fetch customer account details based on mobile number"
     )
     @ApiResponses({
-        @ApiResponse(
-            responseCode = "200",
-            description = "HTTP Status OK"
-        ),
-        @ApiResponse(
-            responseCode = "404",
-            description = "HTTP Status NOT FOUND",
-            content = @Content(
-                schema = @Schema(implementation = ErrorResponseDTO.class)
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "HTTP Status NOT FOUND",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDTO.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "HTTP Status BAD REQUEST",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDTO.class)
+                    )
             )
-        ),
-        @ApiResponse(
-            responseCode = "400",
-            description = "HTTP Status BAD REQUEST",
-            content = @Content(
-                schema = @Schema(implementation = ErrorResponseDTO.class)
-            )
-        )
     })
     @GetMapping("/account")
     public ResponseEntity<CustomerDTO> fetchAccountDetails(
@@ -90,28 +95,28 @@ public class AccountsController {
     }
 
     @Operation(
-        summary = "Update Account Details REST API",
-        description = "REST API to update customer account details"
+            summary = "Update Account Details REST API",
+            description = "REST API to update customer account details"
     )
     @ApiResponses({
-        @ApiResponse(
-            responseCode = "200",
-            description = "HTTP Status OK"
-        ),
-        @ApiResponse(
-            responseCode = "500",
-            description = "HTTP Status INTERNAL SERVER ERROR",
-            content = @Content(
-                schema = @Schema(implementation = ErrorResponseDTO.class)
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status INTERNAL SERVER ERROR",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDTO.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "HTTP Status BAD REQUEST",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDTO.class)
+                    )
             )
-        ),
-        @ApiResponse(
-            responseCode = "400",
-            description = "HTTP Status BAD REQUEST",
-            content = @Content(
-                schema = @Schema(implementation = ErrorResponseDTO.class)
-            )
-        )
     })
     @PutMapping("/account")
     public ResponseEntity<ResponseDTO> updateAccount(@Valid @RequestBody CustomerDTO customerDTO) {
@@ -125,28 +130,28 @@ public class AccountsController {
     }
 
     @Operation(
-        summary = "Delete Account Details REST API",
-        description = "REST API to delete customer account based on mobile number"
+            summary = "Delete Account Details REST API",
+            description = "REST API to delete customer account based on mobile number"
     )
     @ApiResponses({
-        @ApiResponse(
-            responseCode = "200",
-            description = "HTTP Status OK"
-        ),
-        @ApiResponse(
-            responseCode = "404",
-            description = "HTTP Status NOT FOUND",
-            content = @Content(
-                schema = @Schema(implementation = ErrorResponseDTO.class)
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "HTTP Status NOT FOUND",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDTO.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "HTTP Status BAD REQUEST",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDTO.class)
+                    )
             )
-        ),
-        @ApiResponse(
-            responseCode = "400",
-            description = "HTTP Status BAD REQUEST",
-            content = @Content(
-                schema = @Schema(implementation = ErrorResponseDTO.class)
-            )
-        )
     })
     @DeleteMapping("/account")
     public ResponseEntity<ResponseDTO> deleteAccount(
@@ -155,5 +160,10 @@ public class AccountsController {
     ) {
         accountService.deleteAccount(mobileNumber);
         return ResponseEntity.ok(new ResponseDTO(STATUS_200, MESSAGE_200));
+    }
+
+    @GetMapping("/build-version")
+    public ResponseEntity<String> getBuildVersion() {
+        return ResponseEntity.ok(buildVersion);
     }
 }

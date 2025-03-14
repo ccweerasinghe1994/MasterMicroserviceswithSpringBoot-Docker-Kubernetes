@@ -9,3 +9,6 @@ logging:
 docker:
   username: ${DOCKER_USERNAME}
   password: ${DOCKER_PASSWORD}
+
+build:
+  version: "1.0.0"
