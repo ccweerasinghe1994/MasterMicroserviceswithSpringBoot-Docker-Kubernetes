@@ -1,5 +1,6 @@
 package com.cgnexus.accounts.controller;
 
+import com.cgnexus.accounts.dto.AccountContactInfoDTO;
 import com.cgnexus.accounts.dto.CustomerDTO;
 import com.cgnexus.accounts.dto.ErrorResponseDTO;
 import com.cgnexus.accounts.dto.ResponseDTO;
@@ -36,6 +37,8 @@ public class AccountsController {
     private final IAccountService accountService;
 
     private final Environment environment;
+
+    private final AccountContactInfoDTO accountContactInfoDTO;
 
     @Value("${build.version}")
     private String buildVersion;
@@ -201,5 +204,24 @@ public class AccountsController {
     @GetMapping("/java-version")
     public ResponseEntity<String> getJavaVersion() {
         return ResponseEntity.ok(environment.getProperty("JAVA_HOME"));
+    }
+
+    @Operation(
+            summary = "Get Java Version REST API",
+            description = "REST API to get the Java version"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status INTERNAL SERVER ERROR"
+            )
+    })
+    @GetMapping("/contact-info")
+    public ResponseEntity<AccountContactInfoDTO> getContactInformation() {
+        return ResponseEntity.ok(accountContactInfoDTO);
     }
 }

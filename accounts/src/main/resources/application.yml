@@ -12,3 +12,12 @@ docker:
 
 build:
   version: "1.0.0"
+
+accounts:
+  message: "Hello from accounts service"
+  contactDetails:
+    email: "cgnexus@gmail.com"
+    name: "CG Nexus"
+  onCallSupport:
+    - (555) 555-5555
+    - (666) 666-6666
