@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,9 +35,10 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 public class AccountsController {
     private final IAccountService accountService;
 
+    private final Environment environment;
+
     @Value("${build.version}")
     private String buildVersion;
-
 
     @Operation(
             summary = "Create Account REST API",
@@ -162,8 +164,42 @@ public class AccountsController {
         return ResponseEntity.ok(new ResponseDTO(STATUS_200, MESSAGE_200));
     }
 
+    @Operation(
+            summary = "Get Build Version REST API",
+            description = "REST API to get the build version"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status INTERNAL SERVER ERROR"
+            )
+    })
     @GetMapping("/build-version")
     public ResponseEntity<String> getBuildVersion() {
         return ResponseEntity.ok(buildVersion);
+    }
+
+
+    @Operation(
+            summary = "Get Java Version REST API",
+            description = "REST API to get the Java version"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status INTERNAL SERVER ERROR"
+            )
+    })
+    @GetMapping("/java-version")
+    public ResponseEntity<String> getJavaVersion() {
+        return ResponseEntity.ok(environment.getProperty("JAVA_HOME"));
     }
 }
