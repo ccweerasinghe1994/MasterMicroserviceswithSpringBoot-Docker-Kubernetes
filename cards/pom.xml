@@ -97,7 +97,6 @@
                             <password>${docker.password}</password>
                         </auth>
                     </to>
-
                 </configuration>
             </plugin>
             <plugin>
