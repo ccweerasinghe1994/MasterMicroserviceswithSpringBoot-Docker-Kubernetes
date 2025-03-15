@@ -26,3 +26,9 @@ logging:
 docker:
   username: ${DOCKER_USERNAME}
   password: ${DOCKER_PASSWORD}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

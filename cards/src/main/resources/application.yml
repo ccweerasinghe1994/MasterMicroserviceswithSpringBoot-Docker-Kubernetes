@@ -28,14 +28,9 @@ docker:
   username: ${DOCKER_USERNAME}
   password: ${DOCKER_PASSWORD}
 
-build:
-  version: "1.0.0"
 
-cards:
-  message: "Hello from cards service from "
-  contactDetails:
-    email: "cgnexus-prod@gmail.com"
-    name: "CG Nexus"
-  onCallSupport:
-    - (777) 777-7777
-    - (888) 888-8888
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
