@@ -3,7 +3,7 @@ services:
     image: magises/accounts:section4
     container_name: accounts-ms
     ports:
-      - "8082:8082"
+      - "8080:8080"
     deploy:
       resources:
         limits:
@@ -16,7 +16,7 @@ services:
     image: magises/cards:0.0.1-SNAPSHOT
     container_name: cards-ms
     ports:
-      - "8081:8081"
+      - "9000:9000"
     deploy:
       resources:
         limits:
