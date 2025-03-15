@@ -1,3 +1,6 @@
+spring:
+  application:
+    name: "accounts"
 build:
   version: "1.0.0"
 

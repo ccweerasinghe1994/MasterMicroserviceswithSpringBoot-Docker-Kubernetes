@@ -1,8 +1,6 @@
 spring:
-  config:
-    activate:
-      on-profile: "prod"
-
+  application:
+    name: "loans"
 build:
   version: "1.0.0"
 
