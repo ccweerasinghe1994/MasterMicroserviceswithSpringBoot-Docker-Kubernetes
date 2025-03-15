@@ -189,7 +189,7 @@ public class CardsController {
                     description = "HTTP Status INTERNAL SERVER ERROR"
             )
     })
-    @GetMapping("/build-version")
+    @GetMapping("/build-info")
     public ResponseEntity<String> getBuildVersion() {
         return ResponseEntity.ok(buildVersion);
     }

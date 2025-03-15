@@ -19,7 +19,7 @@ spring:
       - "application_prod.yml"
       - "application_qa.yml"
 server:
-  port: 8081
+  port: 9000
 logging:
   pattern:
     console: ${LOG_PATTERN_CONSOLE:%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %msg%n}
