@@ -2,6 +2,7 @@ package com.cgnexus.cards.controller;
 
 
 import com.cgnexus.cards.constants.CardConstants;
+import com.cgnexus.cards.dto.CardsContactInfoDTO;
 import com.cgnexus.cards.dto.CardsDto;
 import com.cgnexus.cards.dto.ErrorResponseDto;
 import com.cgnexus.cards.dto.ResponseDTO;
@@ -16,6 +17,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +36,11 @@ import org.springframework.web.bind.annotation.*;
 public class CardsController {
 
     private final CardsService cardsService;
+    private final Environment environment;
+    private final CardsContactInfoDTO accountContactInfoDTO;
+
+    @Value("${build.version}")
+    private String buildVersion;
 
     @Operation(
             summary = "Create Card REST API",
@@ -167,7 +175,62 @@ public class CardsController {
         }
     }
 
-}
+    @Operation(
+            summary = "Get Build Version REST API",
+            description = "REST API to get the build version"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status INTERNAL SERVER ERROR"
+            )
+    })
+    @GetMapping("/build-version")
+    public ResponseEntity<String> getBuildVersion() {
+        return ResponseEntity.ok(buildVersion);
+    }
 
-//    updateCardDetails
-// deleteCardDetails
+
+    @Operation(
+            summary = "Get Java Version REST API",
+            description = "REST API to get the Java version"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status INTERNAL SERVER ERROR"
+            )
+    })
+    @GetMapping("/java-version")
+    public ResponseEntity<String> getJavaVersion() {
+        return ResponseEntity.ok(environment.getProperty("JAVA_HOME"));
+    }
+
+    @Operation(
+            summary = "Get Java Version REST API",
+            description = "REST API to get the Java version"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status INTERNAL SERVER ERROR"
+            )
+    })
+    @GetMapping("/contact-info")
+    public ResponseEntity<CardsContactInfoDTO> getContactInformation() {
+        return ResponseEntity.ok(accountContactInfoDTO);
+    }
+
+}

@@ -1,6 +1,23 @@
 spring:
   application:
     name: cards
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ''
+  h2:
+    console:
+      enabled: true
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  config:
+    import:
+      - "application_prod.yml"
+      - "application_qa.yml"
 server:
   port: 8081
   servlet:
@@ -8,6 +25,19 @@ server:
 logging:
   pattern:
     console: ${LOG_PATTERN_CONSOLE:%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %msg%n}
+
 docker:
   username: ${DOCKER_USERNAME}
   password: ${DOCKER_PASSWORD}
+
+build:
+  version: "1.0.0"
+
+cards:
+  message: "Hello from cards service from "
+  contactDetails:
+    email: "cgnexus-prod@gmail.com"
+    name: "CG Nexus"
+  onCallSupport:
+    - (777) 777-7777
+    - (888) 888-8888

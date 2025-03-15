@@ -2,6 +2,7 @@ package com.eazybytes.loans.controller;
 
 import com.eazybytes.loans.constants.LoansConstants;
 import com.eazybytes.loans.dto.ErrorResponseDto;
+import com.eazybytes.loans.dto.LoansContactInfoDTO;
 import com.eazybytes.loans.dto.LoansDto;
 import com.eazybytes.loans.dto.ResponseDto;
 import com.eazybytes.loans.service.ILoansService;
@@ -13,7 +14,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,11 +33,17 @@ import org.springframework.web.bind.annotation.*;
 )
 @RestController
 @RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Validated
 public class LoansController {
 
-    private ILoansService iLoansService;
+    private final ILoansService iLoansService;
+
+    private final Environment environment;
+    private final LoansContactInfoDTO loansContactInfoDTO;
+
+    @Value("${build.version}")
+    private String buildVersion;
 
     @Operation(
             summary = "Create Loan REST API",
@@ -56,8 +65,8 @@ public class LoansController {
     )
     @PostMapping("/create")
     public ResponseEntity<ResponseDto> createLoan(@RequestParam
-                                                      @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
-                                                      String mobileNumber) {
+                                                  @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
+                                                  String mobileNumber) {
         iLoansService.createLoan(mobileNumber);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -84,8 +93,8 @@ public class LoansController {
     )
     @GetMapping("/fetch")
     public ResponseEntity<LoansDto> fetchLoanDetails(@RequestParam
-                                                               @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
-                                                               String mobileNumber) {
+                                                     @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
+                                                     String mobileNumber) {
         LoansDto loansDto = iLoansService.fetchLoan(mobileNumber);
         return ResponseEntity.status(HttpStatus.OK).body(loansDto);
     }
@@ -110,16 +119,16 @@ public class LoansController {
                             schema = @Schema(implementation = ErrorResponseDto.class)
                     )
             )
-        }
+    }
     )
     @PutMapping("/update")
     public ResponseEntity<ResponseDto> updateLoanDetails(@Valid @RequestBody LoansDto loansDto) {
         boolean isUpdated = iLoansService.updateLoan(loansDto);
-        if(isUpdated) {
+        if (isUpdated) {
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(new ResponseDto(LoansConstants.STATUS_200, LoansConstants.MESSAGE_200));
-        }else{
+        } else {
             return ResponseEntity
                     .status(HttpStatus.EXPECTATION_FAILED)
                     .body(new ResponseDto(LoansConstants.STATUS_417, LoansConstants.MESSAGE_417_UPDATE));
@@ -150,18 +159,76 @@ public class LoansController {
     )
     @DeleteMapping("/delete")
     public ResponseEntity<ResponseDto> deleteLoanDetails(@RequestParam
-                                                                @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
-                                                                String mobileNumber) {
+                                                         @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
+                                                         String mobileNumber) {
         boolean isDeleted = iLoansService.deleteLoan(mobileNumber);
-        if(isDeleted) {
+        if (isDeleted) {
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(new ResponseDto(LoansConstants.STATUS_200, LoansConstants.MESSAGE_200));
-        }else{
+        } else {
             return ResponseEntity
                     .status(HttpStatus.EXPECTATION_FAILED)
                     .body(new ResponseDto(LoansConstants.STATUS_417, LoansConstants.MESSAGE_417_DELETE));
         }
+    }
+
+    @Operation(
+            summary = "Get Build Version REST API",
+            description = "REST API to get the build version"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status INTERNAL SERVER ERROR"
+            )
+    })
+    @GetMapping("/build-version")
+    public ResponseEntity<String> getBuildVersion() {
+        return ResponseEntity.ok(buildVersion);
+    }
+
+
+    @Operation(
+            summary = "Get Java Version REST API",
+            description = "REST API to get the Java version"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status INTERNAL SERVER ERROR"
+            )
+    })
+    @GetMapping("/java-version")
+    public ResponseEntity<String> getJavaVersion() {
+        return ResponseEntity.ok(environment.getProperty("JAVA_HOME"));
+    }
+
+    @Operation(
+            summary = "Get Java Version REST API",
+            description = "REST API to get the Java version"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status INTERNAL SERVER ERROR"
+            )
+    })
+    @GetMapping("/contact-info")
+    public ResponseEntity<LoansContactInfoDTO> getContactInformation() {
+        return ResponseEntity.ok(loansContactInfoDTO);
     }
 
 }
