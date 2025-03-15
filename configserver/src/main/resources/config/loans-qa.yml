@@ -1,0 +1,12 @@
+build:
+  version: "2.0.0"
+
+loans:
+  message: "Hello from loans service from qa"
+  contactDetails:
+    email: "cgnexus-qa@gmail.com"
+    name: "CG Nexus QA"
+  onCallSupport:
+    - (777) 777-7777
+    - (888) 888-8888
+
