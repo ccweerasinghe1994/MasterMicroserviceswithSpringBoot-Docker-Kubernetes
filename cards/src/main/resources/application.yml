@@ -20,8 +20,6 @@ spring:
       - "application_qa.yml"
 server:
   port: 8081
-  servlet:
-    context-path: /api
 logging:
   pattern:
     console: ${LOG_PATTERN_CONSOLE:%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %msg%n}
