@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: "loans"
+
+build:
+  version: "3.0.0"
+
+loans:
+  message: "Hello from loans service from"
+  contactDetails:
+    email: "cgnexus@gmail.com"
+    name: "CG Nexus"
+  onCallSupport:
+    - (777) 777-7777
+    - (888) 888-8888

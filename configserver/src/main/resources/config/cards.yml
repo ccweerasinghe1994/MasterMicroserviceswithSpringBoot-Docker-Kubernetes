@@ -1,16 +1,15 @@
 spring:
-  config:
-    activate:
-      on-profile: "prod"
+  application:
+    name: cards
 
 build:
   version: "1.0.0"
 
-accounts:
-  message: "Hello from accounts service from prod"
+cards:
+  message: "Hello from cards service from "
   contactDetails:
     email: "cgnexus-prod@gmail.com"
-    name: "CG Nexus Prod"
+    name: "CG Nexus"
   onCallSupport:
     - (777) 777-7777
     - (888) 888-8888

@@ -1,17 +1,14 @@
 spring:
-  config:
-    activate:
-      on-profile: "prod"
-
+  application:
+    name: "accounts"
 build:
   version: "1.0.0"
 
-loans:
-  message: "Hello from loans service from prod"
+accounts:
+  message: "Hello from accounts service from prod"
   contactDetails:
     email: "cgnexus-prod@gmail.com"
     name: "CG Nexus Prod"
   onCallSupport:
     - (777) 777-7777
     - (888) 888-8888
-

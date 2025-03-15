@@ -1,13 +1,11 @@
 spring:
-  config:
-    activate:
-      on-profile: "prod"
-
+  application:
+    name: "loans"
 build:
   version: "1.0.0"
 
-cards:
-  message: "Hello from cards service from prod"
+loans:
+  message: "Hello from loans service from prod"
   contactDetails:
     email: "cgnexus-prod@gmail.com"
     name: "CG Nexus Prod"
