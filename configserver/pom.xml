@@ -10,9 +10,10 @@
     </parent>
     <groupId>com.cgnexus</groupId>
     <artifactId>configserver</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>s6</version>
     <name>configserver</name>
     <description>Config server for cgnexus microservices</description>
+    <packaging>jar</packaging>
     <url/>
     <licenses>
         <license/>
@@ -70,6 +71,27 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.4.4</version>
+                <configuration>
+                    <from>
+                        <image>eclipse-temurin:21-jre</image>
+                        <auth>
+                            <username>${docker.username}</username>
+                            <password>${docker.password}</password>
+                        </auth>
+                    </from>
+                    <to>
+                        <image>docker.io/magises/${project.artifactId}:${project.version}</image>
+                        <auth>
+                            <username>${docker.username}</username>
+                            <password>${docker.password}</password>
+                        </auth>
+                    </to>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.eazybytes</groupId>
     <artifactId>loans</artifactId>
-    <version>0.0.2</version>
+    <version>s6</version>
     <name>loans</name>
     <dependencyManagement>
         <dependencies>

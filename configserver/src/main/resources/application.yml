@@ -2,10 +2,14 @@ spring:
   application:
     name: "configserver"
   profiles:
+    # active: native
     active: git
   cloud:
     config:
       server:
+        # native:
+        # search-locations: "classpath:/config"
+        # search-locations: "file:///Users//eazybytes//Documents//config"
         git:
           uri: "https://github.com/ccweerasinghe1994/MasterMicroserviceswithSpringBoot-Docker-Kubernetes-cloud-config.git"
           default-label: "main"
@@ -17,11 +21,6 @@ spring:
     port: 5672
     username: "guest"
     password: "guest"
-server:
-  port: 8071
-
-encrypt:
-  key: ${ENCRYPT_KEY:6FG74HR6T7DFG4GF97SRD4SSDF46S7FSF46SD74HT7D4}
 
 management:
   endpoints:
@@ -29,11 +28,17 @@ management:
       exposure:
         include: "*"
   health:
-    readinessstate:
+    readiness-state:
       enabled: true
-    livenessstate:
+    liveness-state:
       enabled: true
   endpoint:
     health:
       probes:
         enabled: true
+
+encrypt:
+  key: ${ENCRYPT_KEY:"45D81EC1EF61DF9AD8D3E5BB397F9"}
+
+server:
+  port: 8071
