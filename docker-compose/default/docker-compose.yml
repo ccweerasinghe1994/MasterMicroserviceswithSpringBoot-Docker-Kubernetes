@@ -12,12 +12,10 @@ services:
       timeout: 5s
       retries: 10
       start_period: 5s
-    networks:
-      - cgnexus-ms
-    deploy:
-      resources:
-        limits:
-          memory: 700m
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
+
 
   configserver:
     image: magises/configserver:s6
@@ -30,38 +28,31 @@ services:
       timeout: 5s # wait 5 seconds before considering the check to have failed
       retries: 10 # retry 10 times before giving up
       start_period: 10s # wait for 10 seconds before running the first check
-    deploy:
-      resources:
-        limits:
-          memory: 700m
-    networks:
-      - cgnexus-ms
     env_file:
       - .env
     depends_on:
       rabbitmq:
         condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: microservice-base-config
 
   accounts:
     image: magises/accounts:s6
     container_name: accounts-ms
     ports:
       - "8080:8080"
-    deploy:
-      resources:
-        limits:
-          memory: 700m
-    networks:
-      - cgnexus-ms
     environment:
       - SPRING_APPLICATION_NAME:"accounts"
       - SPRING_CONFIG_IMPORT:"configserver:http://configserver:8071"
-      - SPRING_PROFILES_ACTIVE:"default"
     env_file:
       - .env
     depends_on:
       configserver:
         condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
   cards:
     image: magises/cards:s6
     container_name: cards-ms
@@ -75,13 +66,14 @@ services:
       - cgnexus-ms
     environment:
       - SPRING_APPLICATION_NAME:"cards"
-      - SPRING_CONFIG_IMPORT:"configserver:http://configserver:8071"
-      - SPRING_PROFILES_ACTIVE:"default"
     env_file:
       - .env
     depends_on:
       configserver:
         condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
   loans:
     image: magises/loans:s6
     container_name: loans-ms
@@ -95,13 +87,14 @@ services:
       - cgnexus-ms
     environment:
       - SPRING_APPLICATION_NAME:loans"
-      - SPRING_CONFIG_IMPORT:"configserver:http://configserver:8071"
-      - SPRING_PROFILES_ACTIVE:"default"
     env_file:
       - .env
     depends_on:
       configserver:
         condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
 networks:
   cgnexus-ms:
     driver: bridge
