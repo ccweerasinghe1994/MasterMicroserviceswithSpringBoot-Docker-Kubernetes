@@ -1,8 +1,10 @@
+server:
+  port: 9000
 spring:
   application:
     name: "cards"
   profiles:
-    active: "prod"
+    active: ${SPRING_PROFILES_ACTIVE:"prod"}
   datasource:
     url: jdbc:h2:mem:testdb
     driver-class-name: org.h2.Driver
@@ -17,9 +19,13 @@ spring:
       ddl-auto: update
     show-sql: true
   config:
-    import: "configserver:http://localhost:8071"
-server:
-  port: 9000
+    import: ${SPRING_CONFIG_IMPORT:"configserver:http://localhost:8071/"}
+  rabbitmq:
+    host: "localhost"
+    port: 5672
+    username: "guest"
+    password: "guest"
+
 logging:
   pattern:
     console: ${LOG_PATTERN_CONSOLE:%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %msg%n}
@@ -28,14 +34,9 @@ docker:
   username: ${DOCKER_USERNAME}
   password: ${DOCKER_PASSWORD}
 
-build:
-  version: "1.0.0"
 
-cards:
-  message: "Hello from cards service from "
-  contactDetails:
-    email: "cgnexus-prod@gmail.com"
-    name: "CG Nexus"
-  onCallSupport:
-    - (777) 777-7777
-    - (888) 888-8888
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
