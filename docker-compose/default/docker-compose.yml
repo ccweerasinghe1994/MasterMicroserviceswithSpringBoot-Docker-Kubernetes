@@ -1,9 +1,35 @@
 services:
+  rabbitmq:
+    image: rabbitmq:4.0-management
+    container_name: rabbitmq
+    hostname: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+    networks:
+      - cgnexus-ms
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+
   configserver:
     image: magises/configserver:s6
     container_name: configserver-ms
     ports:
       - "8071:8071"
+    healthcheck:
+      test: "curl --fail http://localhost:8071/actuator/health/readiness | grep UP || exit 1" # check if the server is up
+      interval: 10s # check every 10 seconds
+      timeout: 5s # wait 5 seconds before considering the check to have failed
+      retries: 10 # retry 10 times before giving up
+      start_period: 10s # wait for 10 seconds before running the first check
     deploy:
       resources:
         limits:
@@ -12,6 +38,9 @@ services:
       - cgnexus-ms
     env_file:
       - .env
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
 
   accounts:
     image: magises/accounts:s6
@@ -30,6 +59,9 @@ services:
       - SPRING_PROFILES_ACTIVE:"default"
     env_file:
       - .env
+    depends_on:
+      configserver:
+        condition: service_healthy
   cards:
     image: magises/cards:s6
     container_name: cards-ms
@@ -47,6 +79,9 @@ services:
       - SPRING_PROFILES_ACTIVE:"default"
     env_file:
       - .env
+    depends_on:
+      configserver:
+        condition: service_healthy
   loans:
     image: magises/loans:s6
     container_name: loans-ms
@@ -64,6 +99,9 @@ services:
       - SPRING_PROFILES_ACTIVE:"default"
     env_file:
       - .env
+    depends_on:
+      configserver:
+        condition: service_healthy
 networks:
   cgnexus-ms:
     driver: bridge
