@@ -22,3 +22,18 @@ server:
 
 encrypt:
   key: ${ENCRYPT_KEY:6FG74HR6T7DFG4GF97SRD4SSDF46S7FSF46SD74HT7D4}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    readinessstate:
+      enabled: true
+    livenessstate:
+      enabled: true
+  endpoint:
+    health:
+      probes:
+        enabled: true
