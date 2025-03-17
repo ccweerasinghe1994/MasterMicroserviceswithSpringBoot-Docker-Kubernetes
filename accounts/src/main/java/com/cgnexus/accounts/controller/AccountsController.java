@@ -60,7 +60,7 @@ public class AccountsController {
                     )
             )
     })
-    @PostMapping("/account")
+    @PostMapping("/create")
     public ResponseEntity<ResponseDTO> createAccount(@Valid @RequestBody CustomerDTO customerDTO) {
         accountService.createAccount(customerDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(STATUS_201, MESSAGE_201));
