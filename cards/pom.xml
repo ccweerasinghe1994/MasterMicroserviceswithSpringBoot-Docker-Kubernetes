@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.cgnexus</groupId>
     <artifactId>cards</artifactId>
-    <version>s6</version>
+    <version>s7</version>
     <name>cards</name>
     <description>cards microservice</description>
     <dependencyManagement>
@@ -104,19 +104,8 @@
                 <artifactId>jib-maven-plugin</artifactId>
                 <version>3.4.4</version>
                 <configuration>
-                    <from>
-                        <image>eclipse-temurin:21-jre</image>
-                        <auth>
-                            <username>${docker.username}</username>
-                            <password>${docker.password}</password>
-                        </auth>
-                    </from>
                     <to>
                         <image>docker.io/magises/${project.artifactId}:${project.version}</image>
-                        <auth>
-                            <username>${docker.username}</username>
-                            <password>${docker.password}</password>
-                        </auth>
                     </to>
                 </configuration>
             </plugin>
