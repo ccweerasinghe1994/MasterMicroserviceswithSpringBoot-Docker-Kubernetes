@@ -107,7 +107,7 @@ public class CardsController {
                     )
             }
     )
-    @GetMapping("/card")
+    @GetMapping("/fetch")
     public ResponseEntity<CardsDto> fetchCardDetails(
             @Parameter(
                     description = "Mobile number of the customer",
