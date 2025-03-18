@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.cgnexus</groupId>
     <artifactId>cards</artifactId>
-    <version>s7</version>
+    <version>s8</version>
     <name>cards</name>
     <description>cards microservice</description>
     <dependencyManagement>
