@@ -23,6 +23,10 @@ spring:
     password: "guest"
 
 logging:
+  level:
+    com:
+      cgnexus:
+        cards: ${LOG_LEVEL_COM_CGNEXUS_ACCOUNTS:DEBUG}
   pattern:
     console: ${LOG_PATTERN_CONSOLE:%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %msg%n}
 

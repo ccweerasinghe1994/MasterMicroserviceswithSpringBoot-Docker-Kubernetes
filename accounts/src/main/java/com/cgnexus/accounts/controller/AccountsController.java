@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,7 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 @RequestMapping(value = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
 @RequiredArgsConstructor
 @Validated
+@Slf4j
 public class AccountsController {
     private final IAccountService accountService;
 
@@ -61,7 +63,10 @@ public class AccountsController {
             )
     })
     @PostMapping("/create")
-    public ResponseEntity<ResponseDTO> createAccount(@Valid @RequestBody CustomerDTO customerDTO) {
+    public ResponseEntity<ResponseDTO> createAccount(
+            @RequestHeader(value = "cgnexus-correlation-id") String correlationId,
+            @Valid @RequestBody CustomerDTO customerDTO) {
+        log.debug("cgnexus-correlation-id found: {}", correlationId);
         accountService.createAccount(customerDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(STATUS_201, MESSAGE_201));
     }
@@ -92,9 +97,11 @@ public class AccountsController {
     })
     @GetMapping("/fetch")
     public ResponseEntity<CustomerDTO> fetchAccountDetails(
+            @RequestHeader(value = "cgnexus-correlation-id") String correlationId,
             @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number should be valid")
             @RequestParam("mobileNumber") String mobileNumber
     ) {
+        log.debug("cgnexus-correlation-id found: {}", correlationId);
         CustomerDTO customerDTO = accountService.fetchAccountByMobileNumber(mobileNumber);
         return ResponseEntity.ok(customerDTO);
     }
@@ -124,7 +131,11 @@ public class AccountsController {
             )
     })
     @PutMapping("/account")
-    public ResponseEntity<ResponseDTO> updateAccount(@Valid @RequestBody CustomerDTO customerDTO) {
+    public ResponseEntity<ResponseDTO> updateAccount(
+            @RequestHeader(value = "cgnexus-correlation-id") String correlationId,
+            @Valid @RequestBody CustomerDTO customerDTO
+    ) {
+        log.debug("cgnexus-correlation-id found: {}", correlationId);
         boolean isUpdated = accountService.updateAccount(customerDTO);
 
         if (isUpdated) {
@@ -160,9 +171,11 @@ public class AccountsController {
     })
     @DeleteMapping("/account")
     public ResponseEntity<ResponseDTO> deleteAccount(
+            @RequestHeader(value = "cgnexus-correlation-id") String correlationId,
             @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number should be valid")
             @RequestParam("mobile-number") String mobileNumber
     ) {
+        log.debug("cgnexus-correlation-id found: {}", correlationId);
         accountService.deleteAccount(mobileNumber);
         return ResponseEntity.ok(new ResponseDTO(STATUS_200, MESSAGE_200));
     }
@@ -182,7 +195,8 @@ public class AccountsController {
             )
     })
     @GetMapping("/build-info")
-    public ResponseEntity<String> getBuildVersion() {
+    public ResponseEntity<String> getBuildVersion(@RequestHeader(value = "cgnexus-correlation-id") String correlationId) {
+        log.debug("cgnexus-correlation-id found: {}", correlationId);
         return ResponseEntity.ok(buildVersion);
     }
 
@@ -202,7 +216,8 @@ public class AccountsController {
             )
     })
     @GetMapping("/java-version")
-    public ResponseEntity<String> getJavaVersion() {
+    public ResponseEntity<String> getJavaVersion(@RequestHeader(value = "cgnexus-correlation-id") String correlationId) {
+        log.debug("cgnexus-correlation-id found: {}", correlationId);
         return ResponseEntity.ok(environment.getProperty("JAVA_HOME"));
     }
 
@@ -221,7 +236,8 @@ public class AccountsController {
             )
     })
     @GetMapping("/contact-info")
-    public ResponseEntity<AccountContactInfoDTO> getContactInformation() {
+    public ResponseEntity<AccountContactInfoDTO> getContactInformation(@RequestHeader(value = "cgnexus-correlation-id") String correlationId) {
+        log.debug("cgnexus-correlation-id found: {}", correlationId);
         return ResponseEntity.ok(accountContactInfoDTO);
     }
 }
