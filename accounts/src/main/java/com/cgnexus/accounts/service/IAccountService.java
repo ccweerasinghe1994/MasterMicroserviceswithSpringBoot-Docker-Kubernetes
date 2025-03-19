@@ -1,6 +1,7 @@
 package com.cgnexus.accounts.service;
 
 import com.cgnexus.accounts.dto.CustomerDTO;
+import com.cgnexus.accounts.entity.Account;
 
 public interface IAccountService {
 
@@ -33,4 +34,7 @@ public interface IAccountService {
      * @param mobileNumber The mobile number of the customer
      */
     void deleteAccount(String mobileNumber);
+
+
+    Account findAccountByCustomerId(Long customerId);
 }

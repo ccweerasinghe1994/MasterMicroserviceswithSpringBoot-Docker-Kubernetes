@@ -63,7 +63,7 @@ public class CardsController {
             )
     }
     )
-    @PostMapping("/card")
+    @PostMapping("/create")
     public ResponseEntity<ResponseDTO> createCard(
             @Parameter(
                     description = "Mobile number of the customer",
@@ -107,7 +107,7 @@ public class CardsController {
                     )
             }
     )
-    @GetMapping("/card")
+    @GetMapping("/fetch")
     public ResponseEntity<CardsDto> fetchCardDetails(
             @Parameter(
                     description = "Mobile number of the customer",
@@ -119,7 +119,7 @@ public class CardsController {
                     )
             )
             @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number should be valid")
-            @RequestParam("mobile-number") String mobileNumber) {
+            @RequestParam("mobileNumber") String mobileNumber) {
         CardsDto cardsDto = cardsService.fetchCardDetails(mobileNumber);
         return ResponseEntity.status(HttpStatus.OK).body(cardsDto);
     }

@@ -98,7 +98,7 @@ public class IAccountServiceImpl implements IAccountService {
     }
 
 
-    private Account findAccountByCustomerId(Long customerId) {
+    public Account findAccountByCustomerId(Long customerId) {
         return accountRepository.findByCustomerId(customerId).orElseThrow(
                 () -> new ResourceNotFoundException("Account", "customerId", customerId.toString())
         );

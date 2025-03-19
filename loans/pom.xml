@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.eazybytes</groupId>
     <artifactId>loans</artifactId>
-    <version>s7</version>
+    <version>s8</version>
     <name>loans</name>
     <dependencyManagement>
         <dependencies>
@@ -94,6 +94,10 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-bus-amqp</artifactId>
             <version>4.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
     </dependencies>
 
