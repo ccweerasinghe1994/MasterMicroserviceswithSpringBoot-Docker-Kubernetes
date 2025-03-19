@@ -90,10 +90,10 @@ public class AccountsController {
                     )
             )
     })
-    @GetMapping("/account")
+    @GetMapping("/fetch")
     public ResponseEntity<CustomerDTO> fetchAccountDetails(
             @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number should be valid")
-            @RequestParam("mobile-number") String mobileNumber
+            @RequestParam("mobileNumber") String mobileNumber
     ) {
         CustomerDTO customerDTO = accountService.fetchAccountByMobileNumber(mobileNumber);
         return ResponseEntity.ok(customerDTO);
