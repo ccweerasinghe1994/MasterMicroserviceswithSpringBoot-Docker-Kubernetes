@@ -85,4 +85,7 @@ resilience4j:
           nanos: 100000000 # 100ms
         enable-exponential-backoff: true
         exponential-backoff-multiplier: 2
-
+        #        ignore-exceptions:
+        #          - java.lang.NullPointerException
+        retry-exceptions:
+          - java.util.concurrent.TimeoutException
