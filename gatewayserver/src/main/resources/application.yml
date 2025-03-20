@@ -40,3 +40,12 @@ info:
     name: "gatewayserver"
     description: "CGNEXUS Gateway Server"
     version: "1.0.0"
+
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      slidingWindowSize: 10 # number of calls in the sliding window that are used to calculate the failure rate
+      permittedNumberOfCallsInHalfOpenState: 2 # number of permitted calls in half open state
+      failure-rate-threshold: 50 # percentage of failed calls
+      wait-duration-in-open-state:
+        seconds: 10 # wait time in open state
