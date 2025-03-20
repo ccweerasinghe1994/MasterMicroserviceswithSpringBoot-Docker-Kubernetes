@@ -27,10 +27,10 @@ public class ICustomerDetailsServiceImpl implements ICustomerDetailsService {
     private final LoansFeignClient loansFeignClient;
 
     @Override
-    public CustomerDetailsDTO fetchCustomerDetailsByMobileNumber(String mobileNumber) {
+    public CustomerDetailsDTO fetchCustomerDetailsByMobileNumber(String correlationId, String mobileNumber) {
 
-        ResponseEntity<CardsDto> cardsDtoResponseEntity = cardsFeignClient.fetchCardDetails(mobileNumber);
-        ResponseEntity<LoansDto> loansDtoResponseEntity = loansFeignClient.fetchLoanDetails(mobileNumber);
+        ResponseEntity<CardsDto> cardsDtoResponseEntity = cardsFeignClient.fetchCardDetails(correlationId, mobileNumber);
+        ResponseEntity<LoansDto> loansDtoResponseEntity = loansFeignClient.fetchLoanDetails(correlationId, mobileNumber);
         Customer customer = customerService.fetchCustomerByMobileNumber(mobileNumber);
         Account account = accountService.findAccountByCustomerId(customer.getCustomerId());
         AccountDTO accountDTO = AccountMapper.toAccountDTO(account, new AccountDTO());

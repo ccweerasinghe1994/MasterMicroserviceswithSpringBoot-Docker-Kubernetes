@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,7 @@ import org.springframework.web.bind.annotation.*;
 )
 @RequiredArgsConstructor
 @Validated
+@Slf4j
 public class CardsController {
 
     private final CardsService cardsService;
@@ -109,6 +111,7 @@ public class CardsController {
     )
     @GetMapping("/fetch")
     public ResponseEntity<CardsDto> fetchCardDetails(
+            @RequestHeader(value = "cgnexus-correlation-id") String correlationId,
             @Parameter(
                     description = "Mobile number of the customer",
                     example = "9876543210",
@@ -120,6 +123,7 @@ public class CardsController {
             )
             @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number should be valid")
             @RequestParam("mobileNumber") String mobileNumber) {
+        log.debug("cgnexus-correlation-id found: {}", correlationId);
         CardsDto cardsDto = cardsService.fetchCardDetails(mobileNumber);
         return ResponseEntity.status(HttpStatus.OK).body(cardsDto);
     }
@@ -146,7 +150,11 @@ public class CardsController {
             )
     })
     @PutMapping("/card")
-    public ResponseEntity<ResponseDTO> updateCardDetails(@Valid @RequestBody CardsDto cardsDto) {
+    public ResponseEntity<ResponseDTO> updateCardDetails(
+            @RequestHeader(value = "cgnexus-correlation-id") String correlationId,
+            @Valid @RequestBody CardsDto cardsDto
+    ) {
+        log.debug("cgnexus-correlation-id found: {}", correlationId);
         boolean isUpdated = cardsService.updateCard(cardsDto);
         if (isUpdated) {
             return ResponseEntity
@@ -160,9 +168,13 @@ public class CardsController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<ResponseDTO> deleteCardDetails(@RequestParam
-                                                         @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
-                                                         String mobileNumber) {
+    public ResponseEntity<ResponseDTO> deleteCardDetails(
+            @RequestHeader(value = "cgnexus-correlation-id") String correlationId,
+            @RequestParam
+            @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
+            String mobileNumber
+    ) {
+        log.debug("cgnexus-correlation-id found: {}", correlationId);
         boolean isDeleted = cardsService.deleteCard(mobileNumber);
         if (isDeleted) {
             return ResponseEntity
@@ -190,7 +202,8 @@ public class CardsController {
             )
     })
     @GetMapping("/build-info")
-    public ResponseEntity<String> getBuildVersion() {
+    public ResponseEntity<String> getBuildVersion(@RequestHeader(value = "cgnexus-correlation-id") String correlationId) {
+        log.debug("cgnexus-correlation-id found: {}", correlationId);
         return ResponseEntity.ok(buildVersion);
     }
 
@@ -210,7 +223,8 @@ public class CardsController {
             )
     })
     @GetMapping("/java-version")
-    public ResponseEntity<String> getJavaVersion() {
+    public ResponseEntity<String> getJavaVersion(@RequestHeader(value = "cgnexus-correlation-id") String correlationId) {
+        log.debug("cgnexus-correlation-id found: {}", correlationId);
         return ResponseEntity.ok(environment.getProperty("JAVA_HOME"));
     }
 
@@ -229,7 +243,8 @@ public class CardsController {
             )
     })
     @GetMapping("/contact-info")
-    public ResponseEntity<CardsContactInfoDTO> getContactInformation() {
+    public ResponseEntity<CardsContactInfoDTO> getContactInformation(@RequestHeader(value = "cgnexus-correlation-id") String correlationId) {
+        log.debug("cgnexus-correlation-id found: {}", correlationId);
         return ResponseEntity.ok(accountContactInfoDTO);
     }
 

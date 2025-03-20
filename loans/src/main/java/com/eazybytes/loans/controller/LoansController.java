@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
 @RequiredArgsConstructor
 @Validated
+@Slf4j
 public class LoansController {
 
     private final ILoansService iLoansService;
@@ -64,9 +66,13 @@ public class LoansController {
     }
     )
     @PostMapping("/create")
-    public ResponseEntity<ResponseDto> createLoan(@RequestParam
-                                                  @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
-                                                  String mobileNumber) {
+    public ResponseEntity<ResponseDto> createLoan(
+            @RequestHeader(value = "cgnexus-correlation-id") String correlationId,
+            @RequestParam
+            @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
+            String mobileNumber
+    ) {
+        log.debug("cgnexus-correlation-id found: {}", correlationId);
         iLoansService.createLoan(mobileNumber);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -92,9 +98,13 @@ public class LoansController {
     }
     )
     @GetMapping("/fetch")
-    public ResponseEntity<LoansDto> fetchLoanDetails(@RequestParam
-                                                     @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
-                                                     String mobileNumber) {
+    public ResponseEntity<LoansDto> fetchLoanDetails(
+            @RequestHeader(value = "cgnexus-correlation-id") String correlationId,
+            @RequestParam
+            @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
+            String mobileNumber
+    ) {
+        log.debug("cgnexus-correlation-id found: {}", correlationId);
         LoansDto loansDto = iLoansService.fetchLoan(mobileNumber);
         return ResponseEntity.status(HttpStatus.OK).body(loansDto);
     }
@@ -122,7 +132,11 @@ public class LoansController {
     }
     )
     @PutMapping("/update")
-    public ResponseEntity<ResponseDto> updateLoanDetails(@Valid @RequestBody LoansDto loansDto) {
+    public ResponseEntity<ResponseDto> updateLoanDetails(
+            @RequestHeader(value = "cgnexus-correlation-id") String correlationId,
+            @Valid @RequestBody LoansDto loansDto
+    ) {
+        log.debug("cgnexus-correlation-id found: {}", correlationId);
         boolean isUpdated = iLoansService.updateLoan(loansDto);
         if (isUpdated) {
             return ResponseEntity
@@ -158,9 +172,13 @@ public class LoansController {
     }
     )
     @DeleteMapping("/delete")
-    public ResponseEntity<ResponseDto> deleteLoanDetails(@RequestParam
-                                                         @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
-                                                         String mobileNumber) {
+    public ResponseEntity<ResponseDto> deleteLoanDetails(
+            @RequestHeader(value = "cgnexus-correlation-id") String correlationId,
+            @RequestParam
+            @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
+            String mobileNumber
+    ) {
+        log.debug("cgnexus-correlation-id found: {}", correlationId);
         boolean isDeleted = iLoansService.deleteLoan(mobileNumber);
         if (isDeleted) {
             return ResponseEntity
@@ -188,7 +206,8 @@ public class LoansController {
             )
     })
     @GetMapping("/build-info")
-    public ResponseEntity<String> getBuildVersion() {
+    public ResponseEntity<String> getBuildVersion(@RequestHeader(value = "cgnexus-correlation-id") String correlationId) {
+        log.debug("cgnexus-correlation-id found: {}", correlationId);
         return ResponseEntity.ok(buildVersion);
     }
 
@@ -208,7 +227,8 @@ public class LoansController {
             )
     })
     @GetMapping("/java-version")
-    public ResponseEntity<String> getJavaVersion() {
+    public ResponseEntity<String> getJavaVersion(@RequestHeader(value = "cgnexus-correlation-id") String correlationId) {
+        log.debug("cgnexus-correlation-id found: {}", correlationId);
         return ResponseEntity.ok(environment.getProperty("JAVA_HOME"));
     }
 
@@ -227,7 +247,8 @@ public class LoansController {
             )
     })
     @GetMapping("/contact-info")
-    public ResponseEntity<LoansContactInfoDTO> getContactInformation() {
+    public ResponseEntity<LoansContactInfoDTO> getContactInformation(@RequestHeader(value = "cgnexus-correlation-id") String correlationId) {
+        log.debug("cgnexus-correlation-id found: {}", correlationId);
         return ResponseEntity.ok(loansContactInfoDTO);
     }
 
