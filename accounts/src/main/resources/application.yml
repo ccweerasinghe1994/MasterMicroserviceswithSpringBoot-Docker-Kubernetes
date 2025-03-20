@@ -77,3 +77,12 @@ resilience4j:
         failureRateThreshold: 50
         waitDurationInOpenState:
           seconds: 10
+  retry:
+    configs:
+      default:
+        max-attempts: 3
+        wait-duration:
+          nanos: 100000000 # 100ms
+        enable-exponential-backoff: true
+        exponential-backoff-multiplier: 2
+

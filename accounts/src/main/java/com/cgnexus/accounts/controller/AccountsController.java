@@ -5,6 +5,7 @@ import com.cgnexus.accounts.dto.CustomerDTO;
 import com.cgnexus.accounts.dto.ErrorResponseDTO;
 import com.cgnexus.accounts.dto.ResponseDTO;
 import com.cgnexus.accounts.service.IAccountService;
+import io.github.resilience4j.retry.annotation.Retry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -195,7 +196,16 @@ public class AccountsController {
             )
     })
     @GetMapping("/build-info")
+    @Retry(name = "getBuildVersion", fallbackMethod = "getBuildVersionFallBack")
     public ResponseEntity<String> getBuildVersion(@RequestHeader(value = "cgnexus-correlation-id") String correlationId) {
+        log.debug("getBuildVersion method called");
+        log.debug("cgnexus-correlation-id found: {}", correlationId);
+        throw new NullPointerException();
+//        return ResponseEntity.ok(buildVersion);
+    }
+
+    public ResponseEntity<String> getBuildVersionFallBack(@RequestHeader(value = "cgnexus-correlation-id") String correlationId, Throwable throwable) {
+        log.debug("getBuildVersionFallBack method called");
         log.debug("cgnexus-correlation-id found: {}", correlationId);
         return ResponseEntity.ok(buildVersion);
     }
