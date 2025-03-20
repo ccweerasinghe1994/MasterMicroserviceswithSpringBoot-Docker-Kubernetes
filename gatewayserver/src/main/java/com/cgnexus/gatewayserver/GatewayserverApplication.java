@@ -23,6 +23,10 @@ public class GatewayserverApplication {
                         .filters(f -> f
                                 .rewritePath("/cgnexus/accounts/(?<segment>.*)", "/${segment}")
                                 .addResponseHeader("X-Response-Time", LocalDateTime.now().toString())
+                                .circuitBreaker(config -> config
+                                        .setName("accountsCircuitBreaker")
+                                        .setFallbackUri("forward:/contactSupport")
+                                )
                         )
 
                         .uri("lb://ACCOUNTS")
