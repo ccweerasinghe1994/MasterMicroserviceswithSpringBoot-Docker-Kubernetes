@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.eazybytes</groupId>
     <artifactId>loans</artifactId>
-    <version>s9</version>
+    <version>s10</version>
     <name>loans</name>
     <dependencyManagement>
         <dependencies>
@@ -109,6 +109,10 @@
                 <artifactId>jib-maven-plugin</artifactId>
                 <version>3.4.5</version>
                 <configuration>
+                    <from>
+                        <image>eclipse-temurin@sha256:9cc79f292357e78e18a76e09ec4c0f25c1db041748768028af0bef44ead3bb07
+                        </image>
+                    </from>
                     <to>
                         <image>docker.io/magises/${project.artifactId}:${project.version}</image>
                     </to>
@@ -116,12 +120,16 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <image>
-                        <name>magises/${project.artifactId}:${project.version}</name>
-                    </image>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
         </plugins>

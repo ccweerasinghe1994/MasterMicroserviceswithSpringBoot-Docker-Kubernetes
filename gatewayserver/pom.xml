@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.cgnexus</groupId>
     <artifactId>gatewayserver</artifactId>
-    <version>s9</version>
+    <version>s10</version>
     <packaging>jar</packaging>
     <name>gatewayserver</name>
     <description>API Gateway for cgnexus microservices</description>
