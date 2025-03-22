@@ -29,7 +29,7 @@ services:
       service: network-deploy-service
 
   configserver:
-    image: magises/configserver:s10
+    image: magises/configserver:s11
     container_name: configserver-ms
     ports:
       - "8071:8071"
@@ -76,7 +76,7 @@ services:
       service: microservice-db-config
 
   eurekaserver:
-    image: magises/eurekaserver:s10
+    image: magises/eurekaserver:s11
     container_name: eurekaserver-ms
     ports:
       - "8070:8070"
@@ -98,7 +98,7 @@ services:
 
 
   accounts:
-    image: magises/accounts:s10
+    image: magises/accounts:s11
     container_name: accounts-ms
     ports:
       - "8080:8080"
@@ -125,7 +125,7 @@ services:
       service: microservice-eureka-config
 
   loans:
-    image: magises/loans:s10
+    image: magises/loans:s11
     container_name: loans-ms
     ports:
       - "8090:8090"
@@ -152,7 +152,7 @@ services:
       service: microservice-eureka-config
 
   cards:
-    image: magises/cards:s10
+    image: magises/cards:s11
     container_name: cards-ms
     ports:
       - "9000:9000"
@@ -178,7 +178,7 @@ services:
       file: common-config.yml
       service: microservice-eureka-config
   gatewayserver:
-    image: magises/gatewayserver:s10
+    image: magises/gatewayserver:s11
     container_name: gatewayserver-ms
     ports:
       - "8072:8072"
