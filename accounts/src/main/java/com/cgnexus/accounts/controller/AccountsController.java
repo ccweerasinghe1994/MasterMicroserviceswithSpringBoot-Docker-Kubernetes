@@ -5,6 +5,7 @@ import com.cgnexus.accounts.dto.CustomerDTO;
 import com.cgnexus.accounts.dto.ErrorResponseDTO;
 import com.cgnexus.accounts.dto.ResponseDTO;
 import com.cgnexus.accounts.service.IAccountService;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -226,9 +227,15 @@ public class AccountsController {
             )
     })
     @GetMapping("/java-version")
+    @RateLimiter(name = "getJavaVersion", fallbackMethod = "getJavaVersionFallback")
     public ResponseEntity<String> getJavaVersion(@RequestHeader(value = "cgnexus-correlation-id") String correlationId) {
         log.debug("cgnexus-correlation-id found: {}", correlationId);
         return ResponseEntity.ok(environment.getProperty("JAVA_HOME"));
+    }
+
+    public ResponseEntity<String> getJavaVersionFallback(@RequestHeader(value = "cgnexus-correlation-id") String correlationId, Throwable throwable) {
+        log.debug("cgnexus-correlation-id found: {}", correlationId);
+        return ResponseEntity.ok("Java version 21");
     }
 
     @Operation(
