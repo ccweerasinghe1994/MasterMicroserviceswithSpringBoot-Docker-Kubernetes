@@ -19,11 +19,10 @@ spring:
         response-timeout: 2s
   data:
     redis:
-      connect-timeout: 1000
-      host: localhost
-      port: 6379
-      timeout: 1000
-
+      connect-timeout: ${SPRING_DATA_REDIS_CONNECT_TIMEOUT:1000}
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+      timeout: ${SPRING_DATA_REDIS_TIMEOUT:1000}
 logging:
   level:
     com:
