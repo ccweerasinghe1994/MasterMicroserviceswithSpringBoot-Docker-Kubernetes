@@ -21,6 +21,10 @@ spring:
     port: 5672
     username: "guest"
     password: "guest"
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
 
 logging:
   pattern:
@@ -63,3 +67,32 @@ info:
     name: "accounts"
     description: "Accounts Microservice"
     version: "1.0.0"
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 2
+        failureRateThreshold: 50
+        waitDurationInOpenState:
+          seconds: 10
+  retry:
+    configs:
+      default:
+        max-attempts: 3
+        wait-duration:
+          nanos: 100000000 # 100ms
+        enable-exponential-backoff: true
+        exponential-backoff-multiplier: 2
+        #        ignore-exceptions:
+        #          - java.lang.NullPointerException
+        retry-exceptions:
+          - java.util.concurrent.TimeoutException
+
+  ratelimiter:
+    configs:
+      default:
+        timeoutDuration: 1000ms  # or 1s
+        limitRefreshPeriod: 5000ms # or 5s
+        limitForPeriod: 1

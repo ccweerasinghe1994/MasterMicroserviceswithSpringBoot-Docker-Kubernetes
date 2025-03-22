@@ -1,4 +1,5 @@
 services:
+
   rabbit:
     image: rabbitmq:4.0-management
     hostname: rabbitmq
@@ -15,8 +16,20 @@ services:
       file: common-config.yml
       service: network-deploy-service
 
+  redis:
+    image: redis:7.4.2
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: [ "CMD-SHELL", "redis-cli ping | grep PONG" ]
+      timeout: 10s
+      retries: 10
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
+
   configserver:
-    image: magises/configserver:s9
+    image: magises/configserver:s10
     container_name: configserver-ms
     ports:
       - "8071:8071"
@@ -63,7 +76,7 @@ services:
       service: microservice-db-config
 
   eurekaserver:
-    image: magises/eurekaserver:s9
+    image: magises/eurekaserver:s10
     container_name: eurekaserver-ms
     ports:
       - "8070:8070"
@@ -85,7 +98,7 @@ services:
 
 
   accounts:
-    image: magises/accounts:s9
+    image: magises/accounts:s10
     container_name: accounts-ms
     ports:
       - "8080:8080"
@@ -112,7 +125,7 @@ services:
       service: microservice-eureka-config
 
   loans:
-    image: magises/loans:s9
+    image: magises/loans:s10
     container_name: loans-ms
     ports:
       - "8090:8090"
@@ -139,7 +152,7 @@ services:
       service: microservice-eureka-config
 
   cards:
-    image: magises/cards:s9
+    image: magises/cards:s10
     container_name: cards-ms
     ports:
       - "9000:9000"
@@ -165,7 +178,7 @@ services:
       file: common-config.yml
       service: microservice-eureka-config
   gatewayserver:
-    image: magises/gatewayserver:s9
+    image: magises/gatewayserver:s10
     container_name: gatewayserver-ms
     ports:
       - "8072:8072"
@@ -176,8 +189,15 @@ services:
         condition: service_healthy
       cards:
         condition: service_healthy
+      redis:
+        condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: "gatewayserver"
+      SPRING_DATA_REDIS_CONNECT_TIMEOUT: 2000
+      SPRING_DATA_REDIS_HOST: "redis"
+      SPRING_DATA_REDIS_PORT: 6379
+      SPRING_DATA_REDIS_TIMEOUT: 1000
+
     extends:
       file: common-config.yml
       service: microservice-eureka-config

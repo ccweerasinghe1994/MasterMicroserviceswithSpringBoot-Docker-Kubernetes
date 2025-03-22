@@ -14,7 +14,15 @@ spring:
         locator:
           enabled: false
           lowerCaseServiceId: true
-
+      httpclient:
+        connect-timeout: 1000
+        response-timeout: 2s
+  data:
+    redis:
+      connect-timeout: ${SPRING_DATA_REDIS_CONNECT_TIMEOUT:1000}
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+      timeout: ${SPRING_DATA_REDIS_TIMEOUT:1000}
 logging:
   level:
     com:
@@ -40,3 +48,12 @@ info:
     name: "gatewayserver"
     description: "CGNEXUS Gateway Server"
     version: "1.0.0"
+
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      slidingWindowSize: 10 # number of calls in the sliding window that are used to calculate the failure rate
+      permittedNumberOfCallsInHalfOpenState: 2 # number of permitted calls in half open state
+      failure-rate-threshold: 50 # percentage of failed calls
+      wait-duration-in-open-state:
+        seconds: 10 # wait time in open state
