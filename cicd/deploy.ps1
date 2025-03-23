@@ -35,7 +35,7 @@ cd ../accounts
 
 # create a new variable to store the latest changes
 "accounts:s11", "cards:s11", "configserver:s11", "eurekaserver:s11", "gatewayserver:s11", "loans:s11" | ForEach-Object {
-    docker pull $_
+    docker image pull magises/$_
 }
 
 
