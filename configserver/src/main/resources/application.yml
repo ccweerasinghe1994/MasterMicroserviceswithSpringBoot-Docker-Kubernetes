@@ -36,6 +36,9 @@ management:
     health:
       probes:
         enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
 encrypt:
   key: ${ENCRYPT_KEY:"45D81EC1EF61DF9AD8D3E5BB397F9"}
@@ -45,4 +48,4 @@ server:
 
 logging:
   pattern:
-    console: ${LOG_PATTERN_CONSOLE:%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %msg%n}
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
