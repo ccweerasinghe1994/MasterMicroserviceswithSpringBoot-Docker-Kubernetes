@@ -60,8 +60,9 @@ public class CustomerController {
             @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number should be valid")
             @RequestParam("mobileNumber") String mobileNumber
     ) {
-        log.debug("cgnexus-correlation-id found: {}", correlationId);
+        log.debug("fetch customer details by mobile number: {} stated", mobileNumber);
         CustomerDetailsDTO customerDetailsDTO = iCustomerDetailsService.fetchCustomerDetailsByMobileNumber(correlationId, mobileNumber);
+        log.debug("fetch customer details by mobile number: {} completed", mobileNumber);
         return ResponseEntity.ok(customerDetailsDTO);
     }
 }

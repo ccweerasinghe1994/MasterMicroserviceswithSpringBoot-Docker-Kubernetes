@@ -123,8 +123,9 @@ public class CardsController {
             )
             @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number should be valid")
             @RequestParam("mobileNumber") String mobileNumber) {
-        log.debug("cgnexus-correlation-id found: {}", correlationId);
+        log.debug("fetch card details by mobile number: {} stated", mobileNumber);
         CardsDto cardsDto = cardsService.fetchCardDetails(mobileNumber);
+        log.debug("fetch card details by mobile number: {} completed", mobileNumber);
         return ResponseEntity.status(HttpStatus.OK).body(cardsDto);
     }
 
