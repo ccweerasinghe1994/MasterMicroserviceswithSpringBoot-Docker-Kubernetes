@@ -28,4 +28,7 @@ public class Account extends BaseEntity {
 
     @Column(name = "customer_id")
     private Long customerId;
+
+    @Column(name = "communication_sw")
+    private Boolean communicationSw;
 }
