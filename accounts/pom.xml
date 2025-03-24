@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.cgnexus</groupId>
     <artifactId>accounts</artifactId>
-    <version>s12</version>
+    <version>s13</version>
     <name>accounts</name>
     <description>microservice for accounts</description>
     <dependencyManagement>
