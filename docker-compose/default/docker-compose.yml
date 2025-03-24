@@ -67,7 +67,7 @@ services:
       service: network-deploy-service
 
   minio:
-    image: minio/minio
+    image: minio/minio:latest
     entrypoint:
       - sh
       - -euc
@@ -275,16 +275,20 @@ services:
     extends:
       file: common-config.yml
       service: microservice-base-config
+    environment:
+      - SPRING_APPLICATION_NAME=configserver
+      - OTEL_SERVICE_NAME=configserver
+
   accountsdb:
     container_name: accountsdb
     ports:
       - "3306:3306"
     environment:
       MYSQL_DATABASE: accountsdb
-      OTEL_SERVICE_NAME: "configserver"
     extends:
       file: common-config.yml
       service: microservice-db-config
+
   loansdb:
     container_name: loansdb
     ports:
@@ -327,12 +331,9 @@ services:
       - SPRING_APPLICATION_NAME=eurekaserver
       - OTEL_SERVICE_NAME=eurekaserver
 
-
   accounts:
     image: magises/accounts:s12
     container_name: accounts-ms
-    ports:
-      - "8080:8080"
     healthcheck:
       test: "curl --fail --silent localhost:8080/actuator/health/readiness | grep UP || exit 1"
       interval: 20s
@@ -359,8 +360,6 @@ services:
   loans:
     image: magises/loans:s12
     container_name: loans-ms
-    ports:
-      - "8090:8090"
     healthcheck:
       test: "curl --fail --silent localhost:8090/actuator/health/readiness | grep UP || exit 1"
       interval: 20s
@@ -387,8 +386,6 @@ services:
   cards:
     image: magises/cards:s12
     container_name: cards-ms
-    ports:
-      - "9000:9000"
     healthcheck:
       test: "curl --fail --silent localhost:9000/actuator/health/readiness | grep UP || exit 1"
       interval: 20s
