@@ -258,7 +258,7 @@ services:
       service: network-deploy-service
 
   configserver:
-    image: magises/configserver:s12
+    image: magises/configserver:s13
     container_name: configserver-ms
     ports:
       - "8071:8071"
@@ -310,7 +310,7 @@ services:
       service: microservice-db-config
 
   eurekaserver:
-    image: magises/eurekaserver:s12
+    image: magises/eurekaserver:s13
     container_name: eurekaserver-ms
     ports:
       - "8070:8070"
@@ -332,7 +332,7 @@ services:
       - OTEL_SERVICE_NAME=eurekaserver
 
   accounts:
-    image: magises/accounts:s12
+    image: magises/accounts:s13
     container_name: accounts-ms
     healthcheck:
       test: "curl --fail --silent localhost:8080/actuator/health/readiness | grep UP || exit 1"
@@ -358,7 +358,7 @@ services:
       service: microservice-eureka-config
 
   loans:
-    image: magises/loans:s12
+    image: magises/loans:s13
     container_name: loans-ms
     healthcheck:
       test: "curl --fail --silent localhost:8090/actuator/health/readiness | grep UP || exit 1"
@@ -384,7 +384,7 @@ services:
       service: microservice-eureka-config
 
   cards:
-    image: magises/cards:s12
+    image: magises/cards:s13
     container_name: cards-ms
     healthcheck:
       test: "curl --fail --silent localhost:9000/actuator/health/readiness | grep UP || exit 1"
@@ -409,7 +409,7 @@ services:
       file: common-config.yml
       service: microservice-eureka-config
   gatewayserver:
-    image: magises/gatewayserver:s12
+    image: magises/gatewayserver:s13
     container_name: gatewayserver-ms
     ports:
       - "8072:8072"
