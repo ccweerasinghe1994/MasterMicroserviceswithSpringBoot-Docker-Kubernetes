@@ -23,6 +23,11 @@ spring:
       host: ${SPRING_DATA_REDIS_HOST:localhost}
       port: ${SPRING_DATA_REDIS_PORT:6379}
       timeout: ${SPRING_DATA_REDIS_TIMEOUT:1000}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK-SET-URI:http://localhost:7080/realms/master/protocol/openid-connect/certs}
 logging:
   level:
     com:

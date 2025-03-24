@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.cgnexus</groupId>
     <artifactId>configserver</artifactId>
-    <version>s11</version>
+    <version>s12</version>
     <name>configserver</name>
     <description>Config server for cgnexus microservices</description>
     <packaging>jar</packaging>
