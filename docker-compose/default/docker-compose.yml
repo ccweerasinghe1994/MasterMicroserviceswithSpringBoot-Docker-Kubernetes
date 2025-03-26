@@ -418,6 +418,17 @@ services:
     extends:
       file: common-config.yml
       service: microservice-eureka-config
+  message:
+    image: "magises/message:s13"
+    container_name: message-ms
+    depends_on:
+      rabbit:
+        condition: service_healthy
+    environment:
+      RABBITMQ_HOST: "rabbit"
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
   gatewayserver:
     image: magises/gatewayserver:s13
     container_name: gatewayserver-ms
