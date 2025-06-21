@@ -37,4 +37,6 @@ public interface IAccountService {
 
 
     Account findAccountByCustomerId(Long customerId);
+
+    boolean updateCommunicationStatus(Long accountNumber);
 }

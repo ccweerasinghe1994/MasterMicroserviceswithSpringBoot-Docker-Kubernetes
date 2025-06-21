@@ -24,17 +24,18 @@ cd ../gatewayserver
 cd ../loans
 ./mvnw.cmd compile jib:build
 
+cd ../message
+./mvnw.cmd compile jib:build
+
 # Return to the original directory
 cd ../cicd
 
 Write-Output "All microservices have been built successfully."
 
-# Pull the latest changes for all microservices
-cd ../accounts
 # let's pull the latest changes
 
 # create a new variable to store the latest changes
-"accounts:s12", "cards:s12", "configserver:s12", "eurekaserver:s12", "gatewayserver:s12", "loans:s12" | ForEach-Object {
+"accounts:s13", "cards:s13", "configserver:s13", "eurekaserver:s13", "gatewayserver:s13", "loans:s13","message:s13" | ForEach-Object {
     docker image pull magises/$_
 }
 

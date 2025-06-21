@@ -1,0 +1,34 @@
+{
+	"info": {
+		"_postman_id": "6881a1dc-9d80-45e1-8001-e914956021f7",
+		"name": "Blog API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9389132"
+	},
+	"item": [
+		{
+			"name": "Root API",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"chamara\",\r\n    \"email\":\"asdasd@gmail.com\",\r\n    \"password\":\"password\"\r\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
